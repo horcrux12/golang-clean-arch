@@ -19,10 +19,9 @@ type CategoryController struct {
 func NewCategoryController(db *sql.DB, validate *validator.Validate) CategoryController {
 	tx, err := db.Begin()
 	helper.PanicIfError(err)
-	defer helper.CommitOrRollback(tx)
 	categoryRepository := repository.NewCategoryRepository(tx)
 	return CategoryController{
-		CategoryService: CategoryService.NewCategoryService(categoryRepository, validate),
+		CategoryService: CategoryService.NewCategoryService(categoryRepository, db, tx, validate),
 		AbstractController: AbstractController{
 			FileName: "CategoryController.go",
 		},

@@ -18,6 +18,10 @@ func (service CategoryServiceImpl) Update(ctx *applicationModel.ContextModel, re
 	err := service.Validate.Struct(inputStruct)
 	helper.PanicIfError(err)
 
+	tx, errDB := service.DB.Begin()
+	helper.PanicIfError(errDB)
+	defer helper.CommitOrRollback(tx)
+
 	categoryModel := entity.CategoryModel{
 		Name: sql.NullString{String: inputStruct.Name},
 		ID:   sql.NullInt64{Int64: inputStruct.ID},

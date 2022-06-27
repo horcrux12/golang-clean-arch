@@ -34,3 +34,19 @@ func (controller AbstractController) ServeController(funcName string, response h
 
 	helper.WriteToResponseBody(response, payload)
 }
+
+func ServeControllerClean[T any](funcName string, request *http.Request) *applicationModel.ContextModel {
+	contextModel := request.Context().Value(constanta.ApplicationContextConstanta).(*applicationModel.ContextModel)
+	contextModel.Permission = "test"
+	contextModel.AuthAccessModel.Locale = constanta.IDLangConstanta
+
+	defer func() {
+		contextModel.LoggerModel.Location = fmt.Sprintf("[%s, %s]", "controller.FileName", funcName)
+		helper.LogInfo(contextModel.LoggerModel.ToLoggerObject())
+	}()
+
+	ctx := context.WithValue(request.Context(), constanta.ApplicationContextConstanta, contextModel)
+	request = request.WithContext(ctx)
+
+	return contextModel
+}

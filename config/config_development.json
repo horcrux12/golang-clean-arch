@@ -1,0 +1,19 @@
+{
+  "server" :{
+    "version" : "1.0.0",
+    "host" : "0.0.0.0",
+    "port" : 3001,
+    "prefix_path" : "api",
+    "resource_apps": "restful-api"
+  },
+  "postgresql" : {
+    "address" : "user=postgres password=paramadaksa dbname=RestAPI sslmode=disable host=localhost port=5432",
+    "default_schema" : "project",
+    "max_open_connection": 500,
+    "max_idle_connection": 100
+  },
+  "log_file": [
+    "new_struct.log",
+    "stdout"
+  ]
+}

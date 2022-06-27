@@ -1,0 +1,8 @@
+{
+  "ERR-4-DBS-001" : "Data tidak ditemukan",
+  "ERR-4-DBS-002" : "Data dengan {{.FieldName}} ini tidak ditemukan",
+  "ERR-4-DTO-001" : "Format JSON tidak valid",
+  "ERR-4-DTO-002" : "Format request yang dilakukan tidak sesuai",
+  "ERR-4-SRV-001" : "Mohon maaf, anda tidak memiliki akses untuk melakukan aksi ini",
+  "ERR-4-SRV-002" : "Akses client tidak diijinkan"
+}

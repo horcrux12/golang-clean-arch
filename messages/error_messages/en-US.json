@@ -1,0 +1,8 @@
+{
+  "ERR-4-DBS-001" : "Data not found",
+  "ERR-4-DBS-002" : "Unknown data with this {{.FieldName}}",
+  "ERR-4-DTO-001" : "JSON Format invalid",
+  "ERR-4-DTO-002" : "Invalid Request",
+  "ERR-4-SRV-001" : "You are not allowed to do this action",
+  "ERR-4-SRV-002" : "Unauthorized Client"
+}

@@ -1,0 +1,19 @@
+{
+  "server" :{
+    "version" : "1.0.0",
+    "host" : "${APP_REST_HOST}",
+    "port" : "${APP_REST_PORT}",
+    "prefix_path" : "api",
+    "resource_apps": "restful-api"
+  },
+  "postgresql" : {
+    "address" : "${APP_REST_DB_DEFAULT_CONNECTION}",
+    "default_schema" : "${APP_REST_DB_DEFAULT_PARAM}",
+    "max_open_connection": 500,
+    "max_idle_connection": 100
+  },
+  "log_file": [
+    "new_struct.log",
+    "stdout"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "SUCCESS_GET_LIST_MESSAGE": "Pengambilan daftar {{.SERVICE_NAME}} berhasil dilakukan",
+  "SUCCESS_VIEW_MESSAGE": "Pengambilan detail {{.SERVICE_NAME}} berhasil dilakukan",
+  "SUCCESS_DELETE_MESSAGE": "{{.SERVICE_NAME}} berhasil dihapus",
+  "SUCCESS_INSERT_MESSAGE": "{{.SERVICE_NAME}} berhasil ditambahkan",
+  "SUCCESS_INITIATE_MESSAGE": "Pengambilan inisiasi daftar {{.SERVICE_NAME}} berhasil dilakukan",
+  "SUCCESS_UPDATE_MESSAGE": "{{.SERVICE_NAME}} berhasil diubah"
+}

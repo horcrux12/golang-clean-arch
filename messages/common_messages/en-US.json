@@ -1,0 +1,8 @@
+{
+  "SUCCESS_GET_LIST_MESSAGE": "Successfully get list of {{.SERVICE_NAME}}",
+  "SUCCESS_VIEW_MESSAGE": "Successfully view detail of {{.SERVICE_NAME}}",
+  "SUCCESS_DELETE_MESSAGE": "Successfully delete {{.SERVICE_NAME}}",
+  "SUCCESS_INSERT_MESSAGE": "Successfully insert {{.SERVICE_NAME}}",
+  "SUCCESS_INITIATE_MESSAGE": "Successfully get initiate of {{.SERVICE_NAME}} list",
+  "SUCCESS_UPDATE_MESSAGE": "Successfully update {{.SERVICE_NAME}}"
+}

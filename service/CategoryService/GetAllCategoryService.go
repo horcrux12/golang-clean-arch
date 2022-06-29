@@ -9,7 +9,8 @@ import (
 )
 
 func (service CategoryServiceImpl) FindAll(ctx *applicationModel.ContextModel) (payload out.WebResponse) {
-	app.OpenTxConnection(ctx)
+	err := app.OpenTxConnection(ctx, app.ApplicationAttribute.DBConnection)
+	helper.PanicIfError(err)
 	defer helper.CommitOrRollback(ctx.ConnectionModel.Tx)
 
 	categoriesOnDB := service.CategoryRepository.FindAll(ctx)

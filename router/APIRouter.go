@@ -21,6 +21,7 @@ func APIRouter() {
 	handler.HandleFunc("/v1"+prefixPath+"/categories/{ID}", AppRouter.CategoryController.CategoryControllerWithPathParam).Methods(http.MethodPut, http.MethodGet, http.MethodDelete, http.MethodOptions)
 
 	handler.HandleFunc("/v1"+prefixPath+"/user", AppRouter.UserController.UserControllerWithoutPathParam).Methods(http.MethodPost, http.MethodGet, http.MethodOptions)
+	handler.HandleFunc("/v1"+prefixPath+"/login", AppRouter.UserController.UserControllerLogin).Methods(http.MethodPost, http.MethodOptions)
 
 	//handler.HandleFunc("/v1"+prefixPath+"/get-ip", AppRouter.TrialController.TrialGetIPController).Methods(http.MethodGet, http.MethodOptions)
 

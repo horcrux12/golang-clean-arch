@@ -16,7 +16,8 @@ func (service CategoryServiceImpl) FindByID(ctx *applicationModel.ContextModel, 
 	validateErr := service.Validate.Var(inputRequest.ID, "required")
 	helper.PanicIfErrorWithLocation(validateErr, service.FileName, funcName, ctx)
 
-	app.OpenTxConnection(ctx)
+	err := app.OpenTxConnection(ctx, app.ApplicationAttribute.DBConnection)
+	helper.PanicIfError(err)
 	defer helper.CommitOrRollback(ctx.ConnectionModel.Tx)
 
 	category, err := service.CategoryRepository.FindByID(ctx, entity.CategoryModel{ID: sql.NullInt64{Int64: inputRequest.ID}})

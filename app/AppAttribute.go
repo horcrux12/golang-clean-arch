@@ -29,6 +29,7 @@ type applicationAttribute struct {
 	ErrorBundleI18N          *i18n.Bundle
 	CommonMessagesBundleI18N *i18n.Bundle
 	ConstantaBundleI18N      *i18n.Bundle
+	UserBundleI18N           *i18n.Bundle
 }
 
 func GenerateApplicationAttribute() {
@@ -113,6 +114,16 @@ func loadBundleI18n() {
 	readError(err)
 
 	_, err = ApplicationAttribute.ConstantaBundleI18N.LoadMessageFile(prefixPath + "/common_messages/constanta/id-ID.json")
+	fileNumber++
+
+	//------------ user bundle
+	ApplicationAttribute.UserBundleI18N = i18n.NewBundle(language.Indonesian)
+	ApplicationAttribute.UserBundleI18N.RegisterUnmarshalFunc("json", json.Unmarshal)
+	_, err = ApplicationAttribute.UserBundleI18N.LoadMessageFile(prefixPath + "/common_messages/constanta/en-US.json")
+	fileNumber++
+	readError(err)
+
+	_, err = ApplicationAttribute.UserBundleI18N.LoadMessageFile(prefixPath + "/common_messages/constanta/id-ID.json")
 	fileNumber++
 	readError(err)
 }

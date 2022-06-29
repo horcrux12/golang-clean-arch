@@ -60,3 +60,22 @@ func (controller UserController) UserControllerWithoutPathParam(writer http.Resp
 	defer controller.LogResponse(contextModel, payload, funcName)
 	helper.WriteToResponseBody(writer, payload)
 }
+
+func (controller UserController) UserControllerLogin(writer http.ResponseWriter, request *http.Request) {
+	funcName := "UserControllerWithoutPathParam"
+	var contextModel *applicationModel.ContextModel
+	var payload out.WebResponse
+	var inputRequest in.UserLoginRequest
+
+	helper.ReadFromRequestBody(request, &inputRequest)
+
+	switch request.Method {
+	case http.MethodPost:
+		contextModel = controller.WhiteListServe(funcName, writer, request)
+		payload = controller.UserService.UserLogin(contextModel, inputRequest)
+		break
+	}
+
+	defer controller.LogResponse(contextModel, payload, funcName)
+	helper.WriteToResponseBody(writer, payload)
+}

@@ -5,7 +5,7 @@ import (
 	"github.com/horcrux12/clean-rest-api-template/model/applicationModel"
 )
 
-func PanicIfError(err error) {
+func PanicIfError(err interface{}) {
 	if err != nil {
 		panic(err)
 	}
@@ -18,9 +18,8 @@ func PanicIfErrorWithLocation(err error, fileName, funcName string, contextModel
 	}
 }
 
-//func PanicIfErrorI18N(err errorModel.ErrorExceptionModel, fileName, funcName string, contextModel *applicationModel.ContextModel) {
+//func PanicIfErrorI18N(err errorModel.ErrorExceptionModel) {
 //	if err.Error != nil {
-//		CreateErrorLocation(fileName, funcName, contextModel)
 //		panic(err)
 //	}
 //}

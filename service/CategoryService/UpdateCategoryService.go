@@ -19,7 +19,8 @@ func (service CategoryServiceImpl) Update(ctx *applicationModel.ContextModel, in
 	//helper.PanicIfError(errDB)
 	//defer helper.CommitOrRollback(tx)
 
-	app.OpenTxConnection(ctx)
+	err = app.OpenTxConnection(ctx, app.ApplicationAttribute.DBConnection)
+	helper.PanicIfError(err)
 	defer helper.CommitOrRollback(ctx.ConnectionModel.Tx)
 
 	categoryModel := entity.CategoryModel{

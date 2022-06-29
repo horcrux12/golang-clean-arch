@@ -22,7 +22,7 @@ func (service UserServiceImpl) CreateUser(ctx *applicationModel.ContextModel, in
 	userModel := service.createUserModelForInsert(inputRequest)
 
 	// Insert data user
-	userModel = service.UserRepository.CreateUser(ctx, tx, userModel)
+	userModel = service.UserRepository.CreateUser(ctx, userModel)
 
 	payload.Payload.Status = out.PayloadStatusResponse{
 		Code:    200,

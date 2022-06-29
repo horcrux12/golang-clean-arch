@@ -18,7 +18,8 @@ func (service CategoryServiceImpl) Create(ctx *applicationModel.ContextModel, in
 		Name: sql.NullString{String: inputRequest.Name},
 	}
 
-	app.OpenTxConnection(ctx)
+	err = app.OpenTxConnection(ctx, app.ApplicationAttribute.DBConnection)
+	helper.PanicIfError(err)
 	defer helper.CommitOrRollback(ctx.ConnectionModel.Tx)
 
 	// Insert Data

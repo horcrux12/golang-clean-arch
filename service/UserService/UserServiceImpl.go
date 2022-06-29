@@ -8,13 +8,14 @@ import (
 	"github.com/horcrux12/clean-rest-api-template/model/applicationModel"
 	"github.com/horcrux12/clean-rest-api-template/model/entity"
 	"github.com/horcrux12/clean-rest-api-template/repository"
+	"github.com/horcrux12/clean-rest-api-template/service"
 )
 
 type UserServiceImpl struct {
+	service.AbstractService
 	UserRepository repository.UserRepository
 	Validate       *validator.Validate
 	DB             *sql.DB
-	FileName       string
 }
 
 func NewUserService(userRepository repository.UserRepository, db *sql.DB, validate *validator.Validate) UserService {
@@ -22,7 +23,10 @@ func NewUserService(userRepository repository.UserRepository, db *sql.DB, valida
 		UserRepository: userRepository,
 		DB:             db,
 		Validate:       validate,
-		FileName:       "UserServiceImpl.go",
+		AbstractService: service.AbstractService{
+			FileName:    "UserServiceImpl.go",
+			ServiceName: "USER",
+		},
 	}
 }
 
@@ -32,11 +36,6 @@ func (service UserServiceImpl) UpdateUser(ctx *applicationModel.ContextModel, in
 }
 
 func (service UserServiceImpl) DeleteUser(ctx *applicationModel.ContextModel, inputRequest in.UserRequest) (payload out.WebResponse) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (service UserServiceImpl) UserLogin(ctx *applicationModel.ContextModel, inputRequest in.UserLoginRequest) (payload out.WebResponse) {
 	//TODO implement me
 	panic("implement me")
 }

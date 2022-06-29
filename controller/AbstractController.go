@@ -35,6 +35,17 @@ func (controller AbstractController) ServeController(funcName string, response h
 	helper.WriteToResponseBody(response, payload)
 }
 
+func (controller AbstractController) WhiteListServe(funcName string, response http.ResponseWriter, request *http.Request) *applicationModel.ContextModel {
+	contextModel := request.Context().Value(constanta.ApplicationContextConstanta).(*applicationModel.ContextModel)
+	contextModel.Permission = "test"
+	contextModel.AuthAccessModel.Locale = constanta.IDLangConstanta
+
+	ctx := context.WithValue(request.Context(), constanta.ApplicationContextConstanta, contextModel)
+	request = request.WithContext(ctx)
+
+	return contextModel
+}
+
 func ServeControllerClean[T any](funcName string, request *http.Request) *applicationModel.ContextModel {
 	contextModel := request.Context().Value(constanta.ApplicationContextConstanta).(*applicationModel.ContextModel)
 	contextModel.Permission = "test"
@@ -49,4 +60,11 @@ func ServeControllerClean[T any](funcName string, request *http.Request) *applic
 	request = request.WithContext(ctx)
 
 	return contextModel
+}
+
+func (controller AbstractController) LogResponse(contextModel *applicationModel.ContextModel, payload out.WebResponse, funcName string) {
+	contextModel.LoggerModel.Status = payload.Payload.Status.Code
+	contextModel.LoggerModel.Message = payload.Payload.Status.Message
+	contextModel.LoggerModel.Location = fmt.Sprintf("[%s, %s]", controller.FileName, funcName)
+	helper.LogInfo(contextModel.LoggerModel.ToLoggerObject())
 }

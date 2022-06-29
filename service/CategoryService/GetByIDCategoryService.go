@@ -2,21 +2,24 @@ package CategoryService
 
 import (
 	"database/sql"
+	"github.com/horcrux12/clean-rest-api-template/app"
+	"github.com/horcrux12/clean-rest-api-template/dto/in"
 	"github.com/horcrux12/clean-rest-api-template/dto/out"
 	"github.com/horcrux12/clean-rest-api-template/helper"
 	"github.com/horcrux12/clean-rest-api-template/model/applicationModel"
 	"github.com/horcrux12/clean-rest-api-template/model/entity"
 	"github.com/horcrux12/clean-rest-api-template/model/errorModel"
-	"net/http"
 )
 
-func (service CategoryServiceImpl) FindByID(ctx *applicationModel.ContextModel, request *http.Request) (payload out.WebResponse) {
+func (service CategoryServiceImpl) FindByID(ctx *applicationModel.ContextModel, inputRequest in.CategoryRequest) (payload out.WebResponse) {
 	funcName := "FindByID"
-	inputStruct := service.ReadBodyAndParam(request)
+	validateErr := service.Validate.Var(inputRequest.ID, "required")
+	helper.PanicIfErrorWithLocation(validateErr, service.FileName, funcName, ctx)
 
-	defer helper.CommitOrRollback(service.TX)
+	app.OpenTxConnection(ctx)
+	defer helper.CommitOrRollback(ctx.ConnectionModel.Tx)
 
-	category, err := service.CategoryRepository.FindByID(ctx, entity.CategoryModel{ID: sql.NullInt64{Int64: inputStruct.ID}})
+	category, err := service.CategoryRepository.FindByID(ctx, entity.CategoryModel{ID: sql.NullInt64{Int64: inputRequest.ID}})
 	if err != nil {
 		panic(errorModel.GenerateDataNotFound(service.FileName, funcName))
 	}

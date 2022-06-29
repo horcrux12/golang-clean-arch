@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"database/sql"
 	"errors"
 	"github.com/horcrux12/clean-rest-api-template/helper"
 	"github.com/horcrux12/clean-rest-api-template/model/applicationModel"
@@ -10,20 +9,18 @@ import (
 
 type CategoryRepositoryImpl struct {
 	AbstractRepository
-	Tx *sql.Tx
 }
 
-func NewCategoryRepository(tx *sql.Tx) CategoryRepository {
+func NewCategoryRepository() CategoryRepository {
 	repo := CategoryRepositoryImpl{}
 	repo.TableName = "category"
-	repo.Tx = tx
 	return &repo
 }
 
 func (repository CategoryRepositoryImpl) Save(ctx *applicationModel.ContextModel, category entity.CategoryModel) entity.CategoryModel {
 	query := "INSERT into " + repository.TableName + " (name) VALUES ($1) RETURNING id"
 
-	result := repository.Tx.QueryRow(query, category.Name.String)
+	result := ctx.ConnectionModel.Tx.QueryRow(query, category.Name.String)
 	err := result.Scan(&category.ID)
 
 	helper.PanicIfError(err)
@@ -37,7 +34,7 @@ func (repository CategoryRepositoryImpl) SaveTest(ctx *applicationModel.ContextM
 		"created_client) VALUES ($1, $2, $3, $4, $5, $6, $7) " +
 		"RETURNING id"
 
-	result := repository.Tx.QueryRow(query, tableName, pkey, data, action, schema, by,
+	result := ctx.ConnectionModel.Tx.QueryRow(query, tableName, pkey, data, action, schema, by,
 		client)
 	err := result.Scan(&id)
 
@@ -49,7 +46,7 @@ func (repository CategoryRepositoryImpl) Update(ctx *applicationModel.ContextMod
 	funcName := "Update"
 	query := "UPDATE " + repository.TableName + " SET name = $1 WHERE id = $2"
 
-	_, err := repository.Tx.Exec(query, category.Name.String, category.ID.Int64)
+	_, err := ctx.ConnectionModel.Tx.Exec(query, category.Name.String, category.ID.Int64)
 	helper.PanicIfErrorWithLocation(err, repository.FileName, funcName, ctx)
 
 	return category
@@ -58,14 +55,14 @@ func (repository CategoryRepositoryImpl) Update(ctx *applicationModel.ContextMod
 func (repository CategoryRepositoryImpl) Delete(ctx *applicationModel.ContextModel, category entity.CategoryModel) {
 	query := "DELETE FROM " + repository.TableName + " WHERE id = $1"
 
-	_, err := repository.Tx.Exec(query, category.ID.Int64)
+	_, err := ctx.ConnectionModel.Tx.Exec(query, category.ID.Int64)
 	helper.PanicIfError(err)
 }
 
 func (repository CategoryRepositoryImpl) FindByID(ctx *applicationModel.ContextModel, category entity.CategoryModel) (result entity.CategoryModel, err error) {
 	query := "SELECT id, name FROM " + repository.TableName + " WHERE id = $1"
 
-	rows, err := repository.Tx.Query(query, category.ID.Int64)
+	rows, err := ctx.ConnectionModel.Tx.Query(query, category.ID.Int64)
 	defer rows.Close()
 	helper.PanicIfError(err)
 
@@ -82,7 +79,7 @@ func (repository CategoryRepositoryImpl) FindByID(ctx *applicationModel.ContextM
 
 func (repository CategoryRepositoryImpl) FindAll(ctx *applicationModel.ContextModel) (result []entity.CategoryModel) {
 	query := "SELECT id, name FROM " + repository.TableName
-	rows, err := repository.Tx.Query(query)
+	rows, err := ctx.ConnectionModel.Tx.Query(query)
 	defer rows.Close()
 	helper.PanicIfError(err)
 

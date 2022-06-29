@@ -11,6 +11,7 @@ type CategoryUpdateRequest struct {
 
 type CategoryRequest struct {
 	ID       int64  `json:"id" validate:"required_if=IsUpdate true"`
-	Name     string `json:"name" validate:"required,max=200,min=1"`
+	Name     string `json:"name" validate:"required_unless=IsDelete true,max=200,min=1"`
 	IsUpdate bool
+	IsDelete bool
 }

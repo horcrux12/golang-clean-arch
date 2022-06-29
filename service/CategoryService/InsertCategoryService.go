@@ -2,31 +2,28 @@ package CategoryService
 
 import (
 	"database/sql"
+	"github.com/horcrux12/clean-rest-api-template/app"
 	"github.com/horcrux12/clean-rest-api-template/dto/in"
 	"github.com/horcrux12/clean-rest-api-template/dto/out"
 	"github.com/horcrux12/clean-rest-api-template/helper"
 	"github.com/horcrux12/clean-rest-api-template/model/applicationModel"
 	"github.com/horcrux12/clean-rest-api-template/model/entity"
-	"net/http"
 )
 
-func (service CategoryServiceImpl) Create(ctx *applicationModel.ContextModel, request *http.Request) (payload out.WebResponse) {
-	var inputStruct in.CategoryCreateRequest
-	helper.ReadFromRequestBody(request, &inputStruct)
-
-	err := service.Validate.Struct(inputStruct)
+func (service CategoryServiceImpl) Create(ctx *applicationModel.ContextModel, inputRequest in.CategoryRequest) (payload out.WebResponse) {
+	err := service.Validate.Struct(inputRequest)
 	helper.PanicIfError(err)
 
 	categoryModel := entity.CategoryModel{
-		Name: sql.NullString{String: inputStruct.Name},
+		Name: sql.NullString{String: inputRequest.Name},
 	}
+
+	app.OpenTxConnection(ctx)
+	defer helper.CommitOrRollback(ctx.ConnectionModel.Tx)
 
 	// Insert Data
 	categoryModel = service.CategoryRepository.Save(ctx, categoryModel)
-	payload.Payload.Status = out.PayloadStatusResponse{
-		Code:    200,
-		Message: "OK",
-	}
+	payload.Payload.Status = service.GetCommonResponseMessage("SUCCESS_INSERT_MESSAGE", ctx)
 
 	output := service.ToCategoryResponse(categoryModel)
 	payload.Payload.Data = output

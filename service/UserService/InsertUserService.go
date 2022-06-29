@@ -7,23 +7,19 @@ import (
 	"github.com/horcrux12/clean-rest-api-template/helper"
 	"github.com/horcrux12/clean-rest-api-template/model/applicationModel"
 	"github.com/horcrux12/clean-rest-api-template/model/entity"
-	"net/http"
 )
 
-func (service UserServiceImpl) CreateUser(ctx *applicationModel.ContextModel, request *http.Request) (payload out.WebResponse) {
+func (service UserServiceImpl) CreateUser(ctx *applicationModel.ContextModel, inputRequest in.UserRequest) (payload out.WebResponse) {
 	funcName := "CreateUser"
-	var inputStruct in.UserRequest
-	helper.ReadFromRequestBody(request, &inputStruct)
 
-	inputStruct.IsUpdate = false
-	err := service.Validate.Struct(inputStruct)
+	err := service.Validate.Struct(inputRequest)
 	helper.PanicIfErrorWithLocation(err, service.FileName, funcName, ctx)
 
 	tx, errDB := service.DB.Begin()
 	helper.PanicIfErrorWithLocation(errDB, service.FileName, funcName, ctx)
 	defer helper.CommitOrRollback(tx)
 
-	userModel := service.createUserModelForInsert(inputStruct)
+	userModel := service.createUserModelForInsert(inputRequest)
 
 	// Insert data user
 	userModel = service.UserRepository.CreateUser(ctx, tx, userModel)

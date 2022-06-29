@@ -3,11 +3,11 @@ package UserService
 import (
 	"database/sql"
 	"github.com/go-playground/validator/v10"
+	"github.com/horcrux12/clean-rest-api-template/dto/in"
 	"github.com/horcrux12/clean-rest-api-template/dto/out"
 	"github.com/horcrux12/clean-rest-api-template/model/applicationModel"
 	"github.com/horcrux12/clean-rest-api-template/model/entity"
 	"github.com/horcrux12/clean-rest-api-template/repository"
-	"net/http"
 )
 
 type UserServiceImpl struct {
@@ -26,27 +26,27 @@ func NewUserService(userRepository repository.UserRepository, db *sql.DB, valida
 	}
 }
 
-func (service UserServiceImpl) UpdateUser(ctx *applicationModel.ContextModel, request *http.Request) (payload out.WebResponse) {
+func (service UserServiceImpl) UpdateUser(ctx *applicationModel.ContextModel, inputRequest in.UserRequest) (payload out.WebResponse) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (service UserServiceImpl) DeleteUser(ctx *applicationModel.ContextModel, request *http.Request) (payload out.WebResponse) {
+func (service UserServiceImpl) DeleteUser(ctx *applicationModel.ContextModel, inputRequest in.UserRequest) (payload out.WebResponse) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (service UserServiceImpl) UserLogin(ctx *applicationModel.ContextModel, request *http.Request) (payload out.WebResponse) {
+func (service UserServiceImpl) UserLogin(ctx *applicationModel.ContextModel, inputRequest in.UserLoginRequest) (payload out.WebResponse) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (service UserServiceImpl) GetListUser(ctx *applicationModel.ContextModel, request *http.Request) (payload out.WebResponse) {
+func (service UserServiceImpl) GetListUser(ctx *applicationModel.ContextModel) (payload out.WebResponse) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (service UserServiceImpl) DetailUser(ctx *applicationModel.ContextModel, request *http.Request) (payload out.WebResponse) {
+func (service UserServiceImpl) DetailUser(ctx *applicationModel.ContextModel, inputRequest in.UserRequest) (payload out.WebResponse) {
 	//TODO implement me
 	panic("implement me")
 }

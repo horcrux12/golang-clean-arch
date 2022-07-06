@@ -10,9 +10,10 @@ var AppRouter appRouters
 type appRouters struct {
 	CategoryController controller.CategoryController
 	UserController     controller.UserController
+	TrialController    controller.TrialController
 }
 
 func InitiateRouter() {
-	AppRouter.CategoryController = controller.NewCategoryController(app.ApplicationAttribute.DBConnection, app.ApplicationAttribute.Validate)
-	AppRouter.UserController = controller.NewUserController(app.ApplicationAttribute.DBConnection, app.ApplicationAttribute.Validate)
+	AppRouter.CategoryController = controller.NewCategoryController(app.ApplicationAttribute.Validate)
+	AppRouter.UserController = controller.NewUserController(app.ApplicationAttribute.Validate)
 }

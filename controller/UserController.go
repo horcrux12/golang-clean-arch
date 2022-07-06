@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"database/sql"
 	"encoding/json"
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
@@ -20,10 +19,10 @@ type UserController struct {
 	AbstractController
 }
 
-func NewUserController(db *sql.DB, validate *validator.Validate) UserController {
+func NewUserController(validate *validator.Validate) UserController {
 	userRepository := repository.NewUserRepository()
 	return UserController{
-		UserService: UserService.NewUserService(userRepository, db, validate),
+		UserService: UserService.NewUserService(userRepository, validate),
 	}
 }
 

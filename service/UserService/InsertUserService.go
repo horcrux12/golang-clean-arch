@@ -2,6 +2,8 @@ package UserService
 
 import (
 	"database/sql"
+	"github.com/horcrux12/clean-rest-api-template/app"
+	"github.com/horcrux12/clean-rest-api-template/constanta"
 	"github.com/horcrux12/clean-rest-api-template/dto/in"
 	"github.com/horcrux12/clean-rest-api-template/dto/out"
 	"github.com/horcrux12/clean-rest-api-template/helper"
@@ -15,9 +17,9 @@ func (service UserServiceImpl) CreateUser(ctx *applicationModel.ContextModel, in
 	err := service.Validate.Struct(inputRequest)
 	helper.PanicIfErrorWithLocation(err, service.FileName, funcName, ctx)
 
-	tx, errDB := service.DB.Begin()
-	helper.PanicIfErrorWithLocation(errDB, service.FileName, funcName, ctx)
-	defer helper.CommitOrRollback(tx)
+	err = app.OpenTxConnection(ctx, app.ApplicationAttribute.DBConnection)
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollback(ctx.ConnectionModel.Tx)
 
 	userModel := service.createUserModelForInsert(inputRequest)
 
@@ -36,6 +38,9 @@ func (service UserServiceImpl) CreateUser(ctx *applicationModel.ContextModel, in
 
 func (service UserServiceImpl) createUserModelForInsert(inputStruct in.UserRequest) entity.UserModel {
 	userSecret := helper.GetUUID()
+	if inputStruct.Locale == "" {
+		inputStruct.Locale = constanta.IDLangConstanta
+	}
 	password := helper.EncryptPassword(inputStruct.Password, userSecret)
 	userModel := entity.UserModel{
 		Username:   sql.NullString{String: inputStruct.Username},
@@ -43,6 +48,7 @@ func (service UserServiceImpl) createUserModelForInsert(inputStruct in.UserReque
 		FirstName:  sql.NullString{String: inputStruct.FirstName},
 		LastName:   sql.NullString{String: inputStruct.LastName},
 		UserSecret: sql.NullString{String: userSecret},
+		Locale:     sql.NullString{String: inputStruct.Locale},
 	}
 	return userModel
 }

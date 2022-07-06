@@ -1,7 +1,6 @@
 package UserService
 
 import (
-	"database/sql"
 	"github.com/go-playground/validator/v10"
 	"github.com/horcrux12/clean-rest-api-template/dto/in"
 	"github.com/horcrux12/clean-rest-api-template/dto/out"
@@ -15,13 +14,11 @@ type UserServiceImpl struct {
 	service.AbstractService
 	UserRepository repository.UserRepository
 	Validate       *validator.Validate
-	DB             *sql.DB
 }
 
-func NewUserService(userRepository repository.UserRepository, db *sql.DB, validate *validator.Validate) UserService {
+func NewUserService(userRepository repository.UserRepository, validate *validator.Validate) UserService {
 	return &UserServiceImpl{
 		UserRepository: userRepository,
-		DB:             db,
 		Validate:       validate,
 		AbstractService: service.AbstractService{
 			FileName:    "UserServiceImpl.go",

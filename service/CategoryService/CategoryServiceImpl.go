@@ -1,7 +1,6 @@
 package CategoryService
 
 import (
-	"database/sql"
 	"encoding/json"
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
@@ -16,8 +15,6 @@ import (
 type CategoryServiceImpl struct {
 	CategoryRepository repository.CategoryRepository
 	Validate           *validator.Validate
-	DB                 *sql.DB
-	TX                 *sql.Tx
 	service.AbstractService
 }
 
@@ -36,12 +33,10 @@ func (service CategoryServiceImpl) ReadBodyAndParam(request *http.Request) (resu
 	return
 }
 
-func NewCategoryService(categoryRepository repository.CategoryRepository, db *sql.DB, tx *sql.Tx, validate *validator.Validate) CategoryService {
+func NewCategoryService(categoryRepository repository.CategoryRepository, validate *validator.Validate) CategoryService {
 	return &CategoryServiceImpl{
 		CategoryRepository: categoryRepository,
 		Validate:           validate,
-		DB:                 db,
-		TX:                 tx,
 		AbstractService: service.AbstractService{
 			FileName:    "CategoryServiceImpl.go",
 			ServiceName: "CATEGORY",

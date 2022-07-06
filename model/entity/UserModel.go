@@ -8,5 +8,6 @@ type UserModel struct {
 	Password   sql.NullString
 	FirstName  sql.NullString
 	LastName   sql.NullString
+	Locale     sql.NullString
 	UserSecret sql.NullString
 }

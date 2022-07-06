@@ -11,5 +11,4 @@ type CategoryRepository interface {
 	Delete(ctx *applicationModel.ContextModel, category entity.CategoryModel)
 	FindByID(ctx *applicationModel.ContextModel, category entity.CategoryModel) (entity.CategoryModel, error)
 	FindAll(ctx *applicationModel.ContextModel) []entity.CategoryModel
-	SaveTest(ctx *applicationModel.ContextModel, pkey, action, by int64, tableName, data, schema, client string) (id int64)
 }

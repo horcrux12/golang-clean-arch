@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"github.com/go-co-op/gocron"
 	"github.com/go-playground/locales/en"
 	"github.com/go-playground/locales/id"
 	ut "github.com/go-playground/universal-translator"
@@ -16,6 +17,7 @@ import (
 	"golang.org/x/text/language"
 	"os"
 	"strconv"
+	"time"
 )
 
 var ApplicationAttribute applicationAttribute
@@ -30,6 +32,7 @@ type applicationAttribute struct {
 	CommonMessagesBundleI18N *i18n.Bundle
 	ConstantaBundleI18N      *i18n.Bundle
 	UserBundleI18N           *i18n.Bundle
+	CronScheduler            *gocron.Scheduler
 }
 
 func GenerateApplicationAttribute() {
@@ -44,6 +47,13 @@ func GenerateApplicationAttribute() {
 
 	ApplicationAttribute.ENTranslator = getTranslator(constanta.ENLangConstanta)
 	ApplicationAttribute.IDTranslator = getTranslator(constanta.IDLangConstanta)
+
+	t := time.Now()
+	zone, offset := t.Zone()
+
+	fmt.Println(zone, offset)
+	ApplicationAttribute.CronScheduler = gocron.NewScheduler(time.FixedZone(zone, offset))
+	ApplicationAttribute.CronScheduler.StartAsync()
 
 	loadBundleI18n()
 }
@@ -119,11 +129,11 @@ func loadBundleI18n() {
 	//------------ user bundle
 	ApplicationAttribute.UserBundleI18N = i18n.NewBundle(language.Indonesian)
 	ApplicationAttribute.UserBundleI18N.RegisterUnmarshalFunc("json", json.Unmarshal)
-	_, err = ApplicationAttribute.UserBundleI18N.LoadMessageFile(prefixPath + "/common_messages/constanta/en-US.json")
+	_, err = ApplicationAttribute.UserBundleI18N.LoadMessageFile(prefixPath + "/user_messages/en-US.json")
 	fileNumber++
 	readError(err)
 
-	_, err = ApplicationAttribute.UserBundleI18N.LoadMessageFile(prefixPath + "/common_messages/constanta/id-ID.json")
+	_, err = ApplicationAttribute.UserBundleI18N.LoadMessageFile(prefixPath + "/user_messages/id-ID.json")
 	fileNumber++
 	readError(err)
 }

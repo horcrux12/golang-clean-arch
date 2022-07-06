@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"database/sql"
 	"encoding/json"
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
@@ -9,7 +8,7 @@ import (
 	"github.com/horcrux12/clean-rest-api-template/dto/out"
 	"github.com/horcrux12/clean-rest-api-template/helper"
 	"github.com/horcrux12/clean-rest-api-template/model/applicationModel"
-	"github.com/horcrux12/clean-rest-api-template/repository"
+	"github.com/horcrux12/clean-rest-api-template/repository/postgresql"
 	"github.com/horcrux12/clean-rest-api-template/service/CategoryService"
 	"net/http"
 	"strconv"
@@ -22,12 +21,10 @@ type CategoryController struct {
 
 //var CategoryController = CategoryController{}.New()
 
-func NewCategoryController(db *sql.DB, validate *validator.Validate) CategoryController {
-	tx, err := db.Begin()
-	helper.PanicIfError(err)
-	categoryRepository := repository.NewCategoryRepository()
+func NewCategoryController(validate *validator.Validate) CategoryController {
+	categoryRepository := postgresql.NewCategoryRepository()
 	return CategoryController{
-		CategoryService: CategoryService.NewCategoryService(categoryRepository, db, tx, validate),
+		CategoryService: CategoryService.NewCategoryService(categoryRepository, validate),
 		AbstractController: AbstractController{
 			FileName: "CategoryController.go",
 		},

@@ -2,6 +2,7 @@ package UserService
 
 import (
 	"database/sql"
+	"github.com/horcrux12/clean-rest-api-template/app"
 	"github.com/horcrux12/clean-rest-api-template/dto/in"
 	"github.com/horcrux12/clean-rest-api-template/dto/out"
 	"github.com/horcrux12/clean-rest-api-template/helper"
@@ -11,14 +12,8 @@ import (
 )
 
 func (service UserServiceImpl) UserLogin(ctx *applicationModel.ContextModel, inputRequest in.UserLoginRequest) (payload out.WebResponse) {
-	funcName := "UserLogin"
-
-	userOnDB := service.UserRepository.LoginUser(ctx, entity.UserModel{
-		Username: sql.NullString{String: inputRequest.Username},
-	})
-	if !helper.CheckIsPasswordMatch(inputRequest.Password, userOnDB.Password.String, userOnDB.UserSecret.String) {
-		helper.PanicIfError(errorModel.GenerateForbiddenAccessError(service.FileName, funcName))
-	}
+	// Validate login on DB
+	_ = service.validateLoginOnDB(ctx, inputRequest)
 
 	// todo get token
 
@@ -29,6 +24,25 @@ func (service UserServiceImpl) UserLogin(ctx *applicationModel.ContextModel, inp
 
 	output := service.ToLoginResponse("Login Success")
 	payload.Payload.Data = output
+	return
+}
+
+func (service UserServiceImpl) validateLoginOnDB(ctx *applicationModel.ContextModel, inputRequest in.UserLoginRequest) (userOnDB entity.UserModel) {
+	funcName := "validateLoginOnDB"
+
+	// Open Tx Connection
+	err := app.OpenTxConnection(ctx, app.ApplicationAttribute.DBConnection)
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollback(ctx.ConnectionModel.Tx)
+
+	// get user from DB
+	userOnDB = service.UserRepository.LoginUser(ctx, entity.UserModel{
+		Username: sql.NullString{String: inputRequest.Username},
+	})
+	if !helper.CheckIsPasswordMatch(inputRequest.Password, userOnDB.Password.String, userOnDB.UserSecret.String) {
+		panic(errorModel.GenerateForbiddenAccessError(service.FileName, funcName))
+	}
+
 	return
 }
 

@@ -1,8 +1,7 @@
 package config
 
 import (
-	"github.com/horcrux12/clean-rest-api-template/helper"
-	"github.com/horcrux12/clean-rest-api-template/model/applicationModel"
+	"fmt"
 	"os"
 	"strconv"
 )
@@ -31,10 +30,7 @@ func (config ConfigWithEnv) GetServerVersion() string {
 func convertStringParamToInt(key string, value string) int {
 	intPort, err := strconv.Atoi(value)
 	if err != nil {
-		logModel := applicationModel.GenerateLogModel("-", "-")
-		logModel.Message = "Invalid " + key + " : " + err.Error()
-		logModel.Status = 500
-		helper.LogError(logModel.ToLoggerObject())
+		fmt.Println("Invalid " + key + " : " + err.Error())
 		os.Exit(3)
 	}
 	return intPort

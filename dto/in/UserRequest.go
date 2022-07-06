@@ -6,6 +6,7 @@ type UserRequest struct {
 	Password  string `json:"password" validate:"required,gte=8,max=256"`
 	FirstName string `json:"first_name" validate:"required_if=IsUpdate false,min=1,max=256"`
 	LastName  string `json:"last_name" validate:"omitempty,min=1,max=256"`
+	Locale    string `json:"locale" validate:"omitempty,oneof=id en"`
 	IsUpdate  bool
 }
 

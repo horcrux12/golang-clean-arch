@@ -23,7 +23,7 @@ func APIRouter() {
 	handler.HandleFunc("/v1"+prefixPath+"/user", AppRouter.UserController.UserControllerWithoutPathParam).Methods(http.MethodPost, http.MethodGet, http.MethodOptions)
 	handler.HandleFunc("/v1"+prefixPath+"/login", AppRouter.UserController.UserControllerLogin).Methods(http.MethodPost, http.MethodOptions)
 
-	//handler.HandleFunc("/v1"+prefixPath+"/get-ip", AppRouter.TrialController.TrialGetIPController).Methods(http.MethodGet, http.MethodOptions)
+	handler.HandleFunc("/v1"+prefixPath+"/create-job", AppRouter.TrialController.CobaReminder).Methods(http.MethodPost, http.MethodOptions)
 
 	handler.Use(Middleware)
 	endpoint := config.ApplicationConfiguration.GetServerHost() + ":" + strconv.Itoa(config.ApplicationConfiguration.GetServerPort())
